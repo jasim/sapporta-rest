@@ -3,7 +3,7 @@ import {
   FetchOptions,
   HTTPStatusCode,
   initContract,
-  OverrideableClientArgs,
+  OverridableClientArgs,
 } from '..';
 import { ApiFetcherArgs, initClient, getCompleteUrl } from './client';
 import { Equal, Expect } from './test-helpers';
@@ -225,10 +225,10 @@ type TestClientGetPostsWithBaseHeaders = Expect<
           order?: string;
         };
         headers?: {
-          'x-pagination'?: number;
-          'x-test'?: string;
-          'base-header'?: string;
-          'x-api-key'?: string;
+          'x-pagination'?: unknown;
+          'x-test'?: string | undefined;
+          'base-header'?: string | undefined;
+          'x-api-key'?: string | undefined;
         };
         extraHeaders?: {
           'x-pagination'?: undefined;
@@ -237,7 +237,7 @@ type TestClientGetPostsWithBaseHeaders = Expect<
           'x-api-key'?: undefined;
         } & Record<string, string>;
         fetchOptions?: FetchOptions;
-        overrideClientOptions?: Partial<OverrideableClientArgs>;
+        overrideClientOptions?: Partial<OverridableClientArgs>;
         cache?: FetchOptions['cache'];
       }
     | undefined
@@ -250,26 +250,30 @@ it('should require header when no base headers are provided', () => {
     Equal<
       Actual,
       {
-        query?: {
-          take?: number;
-          skip?: number;
-          order?: string;
-        };
         headers: {
-          'x-pagination'?: number;
-          'x-test'?: string;
-          'base-header'?: string;
           'x-api-key': string;
+          'x-pagination'?: unknown;
+          'x-test'?: string | undefined;
+          'base-header'?: string | undefined;
         };
-        extraHeaders?: {
-          'x-pagination'?: undefined;
-          'x-test'?: undefined;
-          'base-header'?: undefined;
-          'x-api-key'?: undefined;
-        } & Record<string, string>;
-        fetchOptions?: FetchOptions;
-        overrideClientOptions?: Partial<OverrideableClientArgs>;
-        cache?: FetchOptions['cache'];
+        cache?: RequestCache | undefined;
+        fetchOptions?: FetchOptions | undefined;
+        extraHeaders?:
+          | ({
+              'x-pagination'?: undefined;
+              'x-test'?: undefined;
+              'base-header'?: undefined;
+              'x-api-key'?: undefined;
+            } & Record<string, string>)
+          | undefined;
+        overrideClientOptions?: Partial<OverridableClientArgs> | undefined;
+        query?:
+          | {
+              take?: number | undefined;
+              skip?: number | undefined;
+              order?: string | undefined;
+            }
+          | undefined;
       }
     >
   >;
@@ -302,7 +306,7 @@ type TestClientGetPostWithParams = Expect<
         'x-api-key'?: never;
       } & Record<string, string>;
       fetchOptions?: FetchOptions;
-      overrideClientOptions?: Partial<OverrideableClientArgs>;
+      overrideClientOptions?: Partial<OverridableClientArgs>;
       cache?: FetchOptions['cache'];
     }
   >

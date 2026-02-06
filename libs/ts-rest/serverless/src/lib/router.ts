@@ -5,13 +5,13 @@ import {
   isAppRouteNoBody,
   isAppRouteOtherResponse,
   parseJsonQueryObject,
-  ResponseValidationError as ResponseValidationErrorCore,
   validateResponse,
   HTTPStatusCode,
   TsRestResponseError,
   validateIfSchema,
   StandardSchemaError,
   validateMultiSchemaObject,
+  TsRestRequestValidationError,
 } from '@ts-rest/core';
 import { Router, withParams, cors } from 'itty-router';
 import { TsRestRequest } from './request';
@@ -21,11 +21,8 @@ import {
   isAppRouteImplementation,
   isRouterImplementation,
   RouterImplementation,
-  RequestValidationError,
-  ResponseValidationError,
   ServerlessHandlerOptions,
   RouterImplementationOrFluentRouter,
-  TsRestRequestValidationError,
 } from './types';
 import { blobToArrayBuffer } from './utils';
 import { TsRestHttpError } from './http-error';
@@ -289,23 +286,18 @@ export const createServerlessRouter = <
         let validatedResponseBody = result.body;
 
         if (options.responseValidation) {
-          try {
-            const response = validateResponse({
-              appRoute,
-              response: {
-                status: statusCode,
-                body: result.body,
-              },
-            });
+          /**
+           * @throws {TsRestResponseValidationError} when the response validation fails
+           **/
+          const response = validateResponse({
+            appRoute,
+            response: {
+              status: statusCode,
+              body: result.body,
+            },
+          });
 
-            validatedResponseBody = response.body;
-          } catch (e) {
-            if (e instanceof ResponseValidationErrorCore) {
-              throw new ResponseValidationError(appRoute, e.cause);
-            }
-
-            throw e;
-          }
+          validatedResponseBody = response.body;
         }
 
         const responseType = appRoute.responses[statusCode];

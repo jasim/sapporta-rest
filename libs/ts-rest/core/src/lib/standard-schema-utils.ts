@@ -228,7 +228,7 @@ export const validateIfSchema = (
   } = {},
 ): {
   value?: unknown;
-  error?: StandardSchemaError | ZodError;
+  error?: StandardSchemaError;
   schemasUsed: Array<StandardSchemaV1<unknown, unknown>>;
 } => {
   const schemaStandard = parseAsStandardSchema(schema);

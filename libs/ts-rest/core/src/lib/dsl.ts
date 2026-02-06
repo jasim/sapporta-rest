@@ -1,4 +1,3 @@
-import type { z } from 'zod';
 import { StandardSchemaV1 } from './standard-schema';
 import {
   LowercaseKeys,
@@ -26,7 +25,6 @@ export type ContractPlainType<T> = Opaque<T, 'ContractPlainType'>;
 export type ContractNullType = Opaque<typeof NullSymbol, 'ContractNullType'>;
 export type ContractNoBodyType = typeof ContractNoBody;
 export type ContractAnyType =
-  | z.ZodSchema
   | StandardSchemaV1<any>
   | ContractPlainType<unknown>
   | ContractNullType

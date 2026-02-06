@@ -175,16 +175,7 @@ const traversedPathsToOpenApi = (
         ? extractReferenceSchemas(responseSchemaObject, referenceSchemas)
         : null;
 
-      const description =
-        response &&
-        typeof response === 'object' &&
-        'description' in response &&
-        response.description
-          ? response.description
-          : statusCode;
-
       responses[statusCode] = {
-        description,
         ...(responseSchemaObjectWithReferences
           ? {
               content: {
