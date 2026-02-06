@@ -1,4 +1,3 @@
-import { z, type ZodError } from 'zod';
 import { StandardSchemaV1 } from './standard-schema';
 
 /**
@@ -35,16 +34,3 @@ export class StandardSchemaError
     return this.message;
   }
 }
-
-/*
-  Convert a ValidationError to a plain object because ValidationError extends
-  Error and causes problems with NestJS.
-*/
-export const validationErrorResponse = (
-  error: ZodError | StandardSchemaError,
-): Pick<ZodError | StandardSchemaError, 'name' | 'issues'> => {
-  return {
-    name: error.name,
-    issues: error.issues,
-  };
-};

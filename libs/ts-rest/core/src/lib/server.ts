@@ -1,8 +1,5 @@
 import { HTTPStatusCode } from './status-codes';
-import {
-  ResponseValidationError,
-  TsRestResponseValidationError,
-} from './response-validation-error';
+import { TsRestResponseValidationError } from './response-validation-error';
 import {
   AppRoute,
   ContractAnyType,
@@ -10,12 +7,7 @@ import {
   ContractNoBodyType,
   ContractOtherResponse,
 } from './dsl';
-import {
-  areAllSchemasLegacyZod,
-  parseAsStandardSchema,
-  validateIfSchema,
-} from './standard-schema-utils';
-import { type ZodError } from 'zod';
+import { validateIfSchema } from './standard-schema-utils';
 import { StandardSchemaError } from './validation-error';
 
 export const isAppRouteResponse = (

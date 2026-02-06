@@ -10,8 +10,6 @@ import {
   HTTPStatusCode,
   TsRestResponseError,
   validateIfSchema,
-  parseAsStandardSchema,
-  areAllSchemasLegacyZod,
   StandardSchemaError,
   validateMultiSchemaObject,
 } from '@ts-rest/core';
@@ -32,7 +30,6 @@ import {
 import { blobToArrayBuffer } from './utils';
 import { TsRestHttpError } from './http-error';
 import { RouterBuilder } from './router-builder';
-import { type ZodError } from 'zod';
 
 const recursivelyProcessContract = ({
   schema,
@@ -107,28 +104,12 @@ const validateRequest = <TPlatformArgs, TRequestExtension>(
     queryResult.error ||
     bodyResult.error
   ) {
-    const useLegacyZod = areAllSchemasLegacyZod([
-      ...paramsResult.schemasUsed,
-      ...headersResult.schemasUsed,
-      ...queryResult.schemasUsed,
-      ...bodyResult.schemasUsed,
-    ]);
-
-    if (useLegacyZod) {
-      throw new RequestValidationError(
-        (paramsResult.error as ZodError) || null,
-        (headersResult.error as ZodError) || null,
-        (queryResult.error as ZodError) || null,
-        (bodyResult.error as ZodError) || null,
-      );
-    } else {
-      throw new TsRestRequestValidationError(
-        (paramsResult.error as StandardSchemaError) || null,
-        (headersResult.error as StandardSchemaError) || null,
-        (queryResult.error as StandardSchemaError) || null,
-        (bodyResult.error as StandardSchemaError) || null,
-      );
-    }
+    throw new TsRestRequestValidationError(
+      (paramsResult.error as StandardSchemaError) || null,
+      (headersResult.error as StandardSchemaError) || null,
+      (queryResult.error as StandardSchemaError) || null,
+      (bodyResult.error as StandardSchemaError) || null,
+    );
   }
 
   return {

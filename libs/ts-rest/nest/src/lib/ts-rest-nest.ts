@@ -3,8 +3,13 @@ import {
   AppRouter,
   Without,
   ServerInferResponses,
+  ServerInferRequest,
 } from '@ts-rest/core';
-import { TsRestRequestShape } from './ts-rest-request.decorator';
+
+export type TsRestRequestShape<TRoute extends AppRoute> = ServerInferRequest<
+  TRoute,
+  Request['headers']
+>;
 
 type AppRouterMethodShape<T extends AppRoute> = (
   ...args: any[]

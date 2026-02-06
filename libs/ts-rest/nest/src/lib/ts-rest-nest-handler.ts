@@ -24,7 +24,6 @@ import {
 import {
   AppRoute,
   AppRouter,
-  areAllSchemasLegacyZod,
   isAppRoute,
   isAppRouteOtherResponse,
   parseAsStandardSchema,
@@ -34,12 +33,13 @@ import {
   TsRestResponseError,
   validateMultiSchemaObject,
   validateIfSchema,
+  TsRestResponseValidationError,
+  TsRestRequestValidationError,
 } from '@ts-rest/core';
 import {
   TsRestAppRouteMetadataKey,
   TsRestOptionsMetadataKey,
 } from './constants';
-import { TsRestRequestShape } from './ts-rest-request.decorator';
 import { TS_REST_MODULE_OPTIONS_TOKEN } from './ts-rest.module';
 import {
   evaluateTsRestOptions,
@@ -47,6 +47,7 @@ import {
   TsRestOptions,
 } from './ts-rest-options';
 import { type ZodError } from 'zod';
+import { TsRestRequestShape } from './ts-rest-nest';
 
 type TsRestAppRouteMetadata = {
   appRoute: AppRoute;
@@ -58,22 +59,6 @@ type TsRestAppRouteMetadata = {
    */
   routeKey: string | null;
 };
-
-export class TsRestRequestValidationError extends BadRequestException {
-  constructor(
-    public pathParams: StandardSchemaError | null,
-    public headers: StandardSchemaError | null,
-    public query: StandardSchemaError | null,
-    public body: StandardSchemaError | null,
-  ) {
-    super({
-      paramsResult: pathParams,
-      headersResult: headers,
-      queryResult: query,
-      bodyResult: body,
-    });
-  }
-}
 
 export class RequestValidationError extends BadRequestException {
   constructor(
@@ -88,38 +73,6 @@ export class RequestValidationError extends BadRequestException {
       queryResult: query,
       bodyResult: body,
     });
-  }
-}
-
-export { RequestValidationErrorSchemaForNest as RequestValidationErrorSchema } from '@ts-rest/core';
-
-/**
- * Error emitted when response validation fails (when using a standard schema validator)
- *
- * This is the new standard
- */
-export class TsRestResponseValidationError extends InternalServerErrorException {
-  constructor(
-    public appRoute: AppRoute,
-    public error: StandardSchemaError,
-  ) {
-    super(
-      `[ts-rest] Response validation failed for ${appRoute.method} ${appRoute.path}: ${error.message}`,
-    );
-  }
-}
-
-/**
- * @deprecated use TsRestResponseValidationError instead, this will be removed in v4
- */
-export class ResponseValidationError extends InternalServerErrorException {
-  constructor(
-    public appRoute: AppRoute,
-    public error: ZodError,
-  ) {
-    super(
-      `[ts-rest] Response validation failed for ${appRoute.method} ${appRoute.path}: ${error.message}`,
-    );
   }
 }
 
@@ -395,28 +348,12 @@ export class TsRestHandlerInterceptor implements NestInterceptor {
       isQueryInvalid ||
       isBodyInvalid
     ) {
-      const useLegacyZod = areAllSchemasLegacyZod([
-        ...paramsResult.schemasUsed,
-        ...queryResult.schemasUsed,
-        ...bodyResult.schemasUsed,
-        ...headersResult.schemasUsed,
-      ]);
-
-      if (useLegacyZod) {
-        throw new RequestValidationError(
-          (paramsResult.error as ZodError) || null,
-          (headersResult.error as ZodError) || null,
-          (queryResult.error as ZodError) || null,
-          (bodyResult.error as ZodError) || null,
-        );
-      } else {
-        throw new TsRestRequestValidationError(
-          (paramsResult.error as StandardSchemaError) || null,
-          (headersResult.error as StandardSchemaError) || null,
-          (queryResult.error as StandardSchemaError) || null,
-          (bodyResult.error as StandardSchemaError) || null,
-        );
-      }
+      throw new TsRestRequestValidationError(
+        (paramsResult.error as StandardSchemaError) || null,
+        (headersResult.error as StandardSchemaError) || null,
+        (queryResult.error as StandardSchemaError) || null,
+        (bodyResult.error as StandardSchemaError) || null,
+      );
     }
 
     return next.handle().pipe(
@@ -508,16 +445,10 @@ const validateResponse = (
   if (responseValidation.error) {
     const { error } = responseValidation;
 
-    const isZodSchema = areAllSchemasLegacyZod([responseStandardSchema]);
-
-    if (isZodSchema) {
-      throw new ResponseValidationError(appRoute, error as ZodError);
-    } else {
-      throw new TsRestResponseValidationError(
-        appRoute,
-        error as StandardSchemaError,
-      );
-    }
+    throw new TsRestResponseValidationError(
+      appRoute,
+      error as StandardSchemaError,
+    );
   }
 
   return {
