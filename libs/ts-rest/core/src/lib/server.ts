@@ -7,7 +7,10 @@ import {
   ContractNoBodyType,
   ContractOtherResponse,
 } from './dsl';
-import { validateIfSchema } from './standard-schema-utils';
+import {
+  parseAsStandardSchema,
+  validateIfSchema,
+} from './standard-schema-utils';
 import { StandardSchemaError } from './validation-error';
 
 export const isAppRouteResponse = (

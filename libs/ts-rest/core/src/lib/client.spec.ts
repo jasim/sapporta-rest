@@ -32,9 +32,9 @@ const postsRouter = c.router({
   getPost: {
     method: 'GET',
     path: `/posts/:id`,
-    headers: z.object({
+    headers: {
       'x-api-key': z.string().optional(),
-    }),
+    },
     responses: {
       200: postSchema.nullable(),
     },
@@ -52,9 +52,9 @@ const postsRouter = c.router({
   getPosts: {
     method: 'GET',
     path: '/posts',
-    headers: z.object({
+    headers: {
       'x-pagination': z.coerce.number().optional(),
-    }),
+    },
     responses: {
       200: c.type<Post[]>(),
     },
@@ -124,9 +124,9 @@ const postsRouter = c.router({
     responses: {
       200: c.type<Post>(),
     },
-    headers: z.object({
+    headers: {
       'content-type': z.literal('application/merge-patch+json'),
-    }),
+    },
     body: z.object({}).passthrough(),
   },
   deletePost: {
@@ -177,11 +177,11 @@ export const router = c.router(
     },
   },
   {
-    baseHeaders: z.object({
+    baseHeaders: {
       'x-api-key': z.string(),
       'x-test': z.string().optional(),
       'base-header': z.string().optional(),
-    }),
+    },
   },
 );
 
