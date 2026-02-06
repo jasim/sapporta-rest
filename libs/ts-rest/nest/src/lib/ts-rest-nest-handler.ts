@@ -54,6 +54,25 @@ export type TsRestRequestShape<TRoute extends AppRoute> = ServerInferRequest<
   Request['headers']
 >;
 
+/**
+ * Mirrors the internal error thrown by ts-rest when validation of the request fails, but adapted for Nest and with the appropriate metadata to be able to return the correct error response
+ */
+export class TsRestNestRequestValidationError extends BadRequestException {
+  constructor(
+    public pathParams: StandardSchemaError | null,
+    public headers: StandardSchemaError | null,
+    public query: StandardSchemaError | null,
+    public body: StandardSchemaError | null,
+  ) {
+    super({
+      paramsResult: pathParams,
+      headersResult: headers,
+      queryResult: query,
+      bodyResult: body,
+    });
+  }
+}
+
 type TsRestAppRouteMetadata = {
   appRoute: AppRoute;
   /**
@@ -353,11 +372,11 @@ export class TsRestHandlerInterceptor implements NestInterceptor {
       isQueryInvalid ||
       isBodyInvalid
     ) {
-      throw new TsRestRequestValidationError(
-        (paramsResult.error as StandardSchemaError) || null,
-        (headersResult.error as StandardSchemaError) || null,
-        (queryResult.error as StandardSchemaError) || null,
-        (bodyResult.error as StandardSchemaError) || null,
+      throw new TsRestNestRequestValidationError(
+        paramsResult.error || null,
+        headersResult.error || null,
+        queryResult.error || null,
+        bodyResult.error || null,
       );
     }
 
