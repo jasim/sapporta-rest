@@ -1,15 +1,8 @@
+import { initContract } from '@ts-rest/core';
 import {
-  ContractAnyType,
-  initContract,
-  SchemaInputOrType,
-  StandardSchemaV1,
-} from '@ts-rest/core';
-import {
-  RequestValidationErrorSchema,
   TsRestException,
   tsRestHandler,
   TsRestHandler,
-  TsRestRequestValidationError,
 } from './ts-rest-nest-handler';
 import { z } from 'zod';
 import {
@@ -33,7 +26,6 @@ import {
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import * as supertest from 'supertest';
-import { TsRest } from './ts-rest.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
   FastifyAdapter,
@@ -192,9 +184,7 @@ describe('ts-rest-nest-handler', () => {
           queryResult: null,
           paramsResult: null,
         });
-        expect(
-          RequestValidationErrorSchema.safeParse(responsePost.body),
-        ).toStrictEqual({
+        expect(responsePost.body).toStrictEqual({
           data: expect.any(Object),
           success: true,
         });
@@ -355,9 +345,9 @@ describe('ts-rest-nest-handler', () => {
                 message: z.string(),
               }),
             },
-            headers: z.object({
+            headers: {
               some: z.string(),
-            }),
+            },
           },
         });
 
@@ -415,9 +405,9 @@ describe('ts-rest-nest-handler', () => {
                 message: z.string(),
               }),
             },
-            headers: z.object({
+            headers: {
               some: z.string(),
-            }),
+            },
           },
         });
 
