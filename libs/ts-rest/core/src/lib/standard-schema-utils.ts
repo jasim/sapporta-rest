@@ -3,7 +3,6 @@ import { StandardSchemaV1 } from './standard-schema';
 import { StandardSchemaError } from './validation-error';
 import { ContractAnyType } from './dsl';
 
-const VENDOR_LEGACY_ZOD = 'zod-ts-rest-polyfill';
 const VENDOR_STANDARD_SCHEMA = 'ts-rest-combined';
 
 /**
@@ -102,12 +101,6 @@ export const validateMultiSchemaObject = (
         `Invalid schema provided for header ${key}, please use a valid schema`,
       );
     }
-  }
-
-  if (vendorSet.size > 1 && vendorSet.has(VENDOR_LEGACY_ZOD)) {
-    throw new Error(
-      'Cannot mix zod legacy and standard schema libraries, please use zod >= 3.24.0 or any other standard schema library',
-    );
   }
 
   if (subSchemas.size === 0) {
@@ -284,15 +277,4 @@ export const validateAgainstStandardSchema = (
   return {
     value: result.value,
   };
-};
-
-/**
- * Use this to decide whether to return the old-style ZodError or the new-style StandardSchemaError
- */
-export const areAllSchemasLegacyZod = (
-  schemas: (StandardSchemaV1<unknown, unknown> | null | undefined)[],
-): boolean => {
-  return schemas
-    .filter(Boolean)
-    .every((schema) => schema?.['~standard'].vendor === VENDOR_LEGACY_ZOD);
 };

@@ -72,19 +72,10 @@ export const validateResponse = ({
     );
 
     if (responseValidation.error) {
-      const isZodSchema = areAllSchemasLegacyZod([responseStandardSchema]);
-
-      if (isZodSchema) {
-        throw new ResponseValidationError(
-          appRoute,
-          responseValidation.error as ZodError,
-        );
-      } else {
-        throw new TsRestResponseValidationError(
-          appRoute,
-          responseValidation.error as StandardSchemaError,
-        );
-      }
+      throw new TsRestResponseValidationError(
+        appRoute,
+        responseValidation.error as StandardSchemaError,
+      );
     }
 
     return {
