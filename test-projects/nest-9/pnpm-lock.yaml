@@ -22,7 +22,7 @@ importers:
         version: file:../../dist/libs/ts-rest/core(@types/node@20.3.1)
       '@ts-rest/nest':
         specifier: file:../../dist/libs/ts-rest/nest
-        version: nest@file:../../dist/libs/ts-rest/nest
+        version: file:../../dist/libs/ts-rest/nest(@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/core@9.4.0(@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@ts-rest/core@file:../../dist/libs/ts-rest/core(@types/node@20.3.1))(rxjs@7.8.1)
       reflect-metadata:
         specifier: 0.1.13
         version: 0.1.13
@@ -554,6 +554,14 @@ packages:
     peerDependenciesMeta:
       '@types/node':
         optional: true
+
+  '@ts-rest/nest@file:../../dist/libs/ts-rest/nest':
+    resolution: {directory: ../../dist/libs/ts-rest/nest, type: directory}
+    peerDependencies:
+      '@nestjs/common': ^9.0.0 || ^10.0.0 || ^11.0.0
+      '@nestjs/core': ^9.0.0 || ^10.0.0 || ^11.0.0
+      '@ts-rest/core': ~3.52.0
+      rxjs: ^7.1.0
 
   '@tsconfig/node10@1.0.9':
     resolution: {integrity: sha512-jNsYVVxU8v5g43Erja32laIDHXeoNvFEpX33OK4d6hljo3jDhCBDhx5dhCCTMWUojscpAagGiRkBKxpdl9fxqA==}
@@ -1997,9 +2005,6 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  nest@file:../../dist/libs/ts-rest/nest:
-    resolution: {directory: ../../dist/libs/ts-rest/nest, type: directory}
-
   node-abort-controller@3.1.1:
     resolution: {integrity: sha512-AGK2yQKIjRuqnc6VkX2Xj5d+QW8xZ87pa1UK6yA6ouUyuxfHuMP6umE5QK7UmTeOAymo+Zx1Fxiuw9rVx8taHQ==}
 
@@ -3384,6 +3389,13 @@ snapshots:
   '@ts-rest/core@file:../../dist/libs/ts-rest/core(@types/node@20.3.1)':
     optionalDependencies:
       '@types/node': 20.3.1
+
+  '@ts-rest/nest@file:../../dist/libs/ts-rest/nest(@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/core@9.4.0(@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1))(@ts-rest/core@file:../../dist/libs/ts-rest/core(@types/node@20.3.1))(rxjs@7.8.1)':
+    dependencies:
+      '@nestjs/common': 9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 9.4.0(@nestjs/common@9.4.0(reflect-metadata@0.1.13)(rxjs@7.8.1))(@nestjs/platform-express@9.4.0)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@ts-rest/core': file:../../dist/libs/ts-rest/core(@types/node@20.3.1)
+      rxjs: 7.8.1
 
   '@tsconfig/node10@1.0.9': {}
 
@@ -5135,8 +5147,6 @@ snapshots:
   negotiator@0.6.3: {}
 
   neo-async@2.6.2: {}
-
-  nest@file:../../dist/libs/ts-rest/nest: {}
 
   node-abort-controller@3.1.1: {}
 
