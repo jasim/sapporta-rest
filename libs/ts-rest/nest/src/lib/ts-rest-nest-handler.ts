@@ -35,6 +35,7 @@ import {
   validateIfSchema,
   TsRestResponseValidationError,
   TsRestRequestValidationError,
+  ServerInferRequest,
 } from '@ts-rest/core';
 import {
   TsRestAppRouteMetadataKey,
@@ -47,7 +48,11 @@ import {
   TsRestOptions,
 } from './ts-rest-options';
 import { type ZodError } from 'zod';
-import { TsRestRequestShape } from './ts-rest-nest';
+
+export type TsRestRequestShape<TRoute extends AppRoute> = ServerInferRequest<
+  TRoute,
+  Request['headers']
+>;
 
 type TsRestAppRouteMetadata = {
   appRoute: AppRoute;

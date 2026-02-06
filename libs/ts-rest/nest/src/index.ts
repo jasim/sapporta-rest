@@ -1,5 +1,4 @@
 export * from './lib/constants';
-export * from './lib/ts-rest-nest';
 export * from './lib/ts-rest.interceptor';
 export * from './lib/ts-rest-nest-handler';
 export { TsRestModule } from './lib/ts-rest.module';
