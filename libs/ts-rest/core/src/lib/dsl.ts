@@ -32,15 +32,6 @@ export type ContractAnyType =
   | ContractNullType
   | null;
 
-/**
- * It's the same as ContractAnyType, but it doesn't include standard schema - used for legacy headers support
- */
-export type ContractAnyTypeLegacy =
-  | z.ZodSchema
-  | ContractPlainType<unknown>
-  | ContractNullType
-  | null;
-
 export type ContractOtherResponse<T extends ContractAnyType> = Opaque<
   { contentType: string; body: T },
   'ContractOtherResponse'
@@ -55,7 +46,7 @@ type AppRouteCommon = {
   path: Path;
   pathParams?: ContractAnyType;
   query?: ContractAnyType;
-  headers?: Record<string, ContractAnyType> | ContractAnyTypeLegacy;
+  headers?: Record<string, ContractAnyType>;
   summary?: string;
   description?: string;
   deprecated?: boolean;
@@ -139,14 +130,9 @@ type RecursivelyApplyOptions<
 };
 
 /**
- * As of 3.53.0 we support Zod (pre standard schema) and standard schema, this function
- * serves to merge the two types together
- *
- * If you're merging two legacy zods, it'll use the zod helper method
- *
- * Else it'll merge based on the new object structure (i.e. where headers are Records not schemas)
+ * Merge headers together
  */
-export type MergeHeadersWithLegacySupport<
+export type MergeHeaders<
   A extends AppRouteCommon['headers'],
   B extends AppRouteCommon['headers'],
 > = [A, B] extends [undefined, undefined]
@@ -155,45 +141,11 @@ export type MergeHeadersWithLegacySupport<
   ? B
   : B extends undefined
   ? A
-  : A extends ContractAnyTypeLegacy
-  ? B extends ContractAnyTypeLegacy
-    ? MergeHeadersLegacy<A, B>
-    : unknown
   : A extends Record<string, ContractAnyType>
   ? B extends Record<string, ContractAnyType>
     ? MergeObjectBasedHeaders<A, B>
     : unknown
   : unknown;
-
-/**
- * pre standard schema we used to have headers typed as a zod object, now we type them as Record<string, ContractAnyType>
- *
- * This function serves to deal with the old type
- */
-type MergeHeadersLegacy<A, B> = A extends z.AnyZodObject
-  ? B extends z.AnyZodObject
-    ? z.ZodObject<
-        z.objectUtil.MergeShapes<A['shape'], B['shape']>,
-        B['_def']['unknownKeys'],
-        B['_def']['catchall']
-      >
-    : unknown extends B
-    ? A
-    : MixedZodError<A, B>
-  : unknown extends A
-  ? B
-  : B extends z.AnyZodObject
-  ? MixedZodError<A, B>
-  : unknown extends B
-  ? A
-  : Prettify<
-      Merge<
-        A extends ContractPlainType<infer APlain> ? APlain : A,
-        B extends ContractPlainType<infer BPlain> ? BPlain : B
-      >
-    >;
-
-type MixedZodError<A, B> = Opaque<{ a: A; b: B }, 'MixedZodError'>;
 
 /**
  * Headers are typed as a Record<string, ContractAnyType>
@@ -232,9 +184,6 @@ export type InferHeadersInput<
   : // if empty object
   IsEmptyObject<THeaders> extends true
   ? {}
-  : // if Zod
-  THeaders extends z.AnyZodObject
-  ? LowercaseKeys<z.input<THeaders>>
   : // if modern object-based headers
   THeaders extends Record<string, ContractAnyType>
   ? LowercaseKeys<
@@ -278,9 +227,6 @@ export type InferHeadersOutput<
   : // if empty object
   IsEmptyObject<THeaders> extends true
   ? {}
-  : // if Zod
-  THeaders extends z.AnyZodObject
-  ? LowercaseKeys<z.output<THeaders>>
   : // if modern object-based headers
   THeaders extends Record<string, ContractAnyType>
   ? {
@@ -298,7 +244,7 @@ type ApplyOptions<
     path: TOptions['pathPrefix'] extends string
       ? `${TOptions['pathPrefix']}${TRoute['path']}`
       : TRoute['path'];
-    headers: MergeHeadersWithLegacySupport<
+    headers: MergeHeaders<
       UnknownToUndefined<TOptions['baseHeaders']>,
       UnknownToUndefined<TRoute['headers']>
     >;
@@ -355,7 +301,7 @@ export type FlattenAppRouter<T extends AppRouter | AppRoute> =
       }[keyof T];
 
 export type RouterOptions<TPrefix extends string = string> = {
-  baseHeaders?: Record<string, ContractAnyType> | ContractAnyTypeLegacy;
+  baseHeaders?: Record<string, ContractAnyType>;
   strictStatusCodes?: boolean;
   pathPrefix?: TPrefix;
   commonResponses?: Record<number, AppRouteResponse>;

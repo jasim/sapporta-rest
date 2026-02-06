@@ -1,8 +1,13 @@
 import { createExpressEndpoints, initServer } from '@ts-rest/express';
 import express from 'express';
 import * as bodyParser from 'body-parser';
-import { initClient, initContract, isZodType } from '@ts-rest/core';
-import { z } from 'zod/v4';
+import {
+  initClient,
+  initContract,
+  isZodType,
+  type ServerInferRequest,
+} from '@ts-rest/core';
+import { z } from 'zod';
 
 const c = initContract();
 
@@ -10,6 +15,8 @@ const PokemonSchema = z.object({
   id: z.number(),
   name: z.string(),
 });
+
+type Infer = ServerInferRequest<typeof contract>['getPokemon'];
 
 export const contract = c.router({
   getPokemon: {
