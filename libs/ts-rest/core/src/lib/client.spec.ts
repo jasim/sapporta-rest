@@ -4,6 +4,7 @@ import {
   HTTPStatusCode,
   initContract,
   OverridableClientArgs,
+  StandardSchemaError,
 } from '..';
 import { ApiFetcherArgs, initClient, getCompleteUrl } from './client';
 import { Equal, Expect } from './test-helpers';
@@ -1184,7 +1185,7 @@ describe('custom api', () => {
 
     await expect(
       client.posts.getPost({ params: { id: '1' } }),
-    ).rejects.toThrowError(ZodError);
+    ).rejects.toThrowError(StandardSchemaError);
   });
 });
 

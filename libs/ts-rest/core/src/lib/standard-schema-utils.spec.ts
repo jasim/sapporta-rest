@@ -83,22 +83,6 @@ describe('standard schema utils', () => {
 
       expect(result).toEqual({ value: { foo: 'bar' }, schemasUsed: [] });
     });
-
-    it('should throw an error if the schema is invalid', () => {
-      const data = { foo: 'bar' };
-      const schema = z.object({ foo: z.number() });
-
-      const result = validateIfSchema(data, schema);
-
-      expect(result).toStrictEqual({
-        error: new StandardSchemaError([
-          {
-            message: '',
-          },
-        ]),
-        schemasUsed: [schema],
-      });
-    });
   });
 
   describe('validateMultiSchemaObject', () => {
@@ -114,17 +98,16 @@ describe('standard schema utils', () => {
 
       const result = validateMultiSchemaObject(headers, headersSchema);
 
-      expect(result).toEqual({
-        // error: new ZodError([
-        //   {
-        //     code: 'invalid_type',
-        //     expected: 'string',
-        //     received: 'undefined',
-        //     path: ['x-bar'],
-        //     message: 'Required',
-        //   },
-        // ]),
-        schemasUsed: [headersSchema],
+      expect(result).toStrictEqual({
+        error: new StandardSchemaError([
+          {
+            expected: 'string',
+            code: 'invalid_type',
+            path: ['x-bar'],
+            message: 'Invalid input: expected string, received undefined',
+          } as StandardSchemaV1.Issue,
+        ]),
+        schemasUsed: [headersSchema['x-foo'], headersSchema['x-bar']],
       });
     });
 

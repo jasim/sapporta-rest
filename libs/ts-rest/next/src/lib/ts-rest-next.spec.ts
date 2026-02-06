@@ -396,10 +396,14 @@ describe('createNextRouter', () => {
       await resultingRouter(req, mockRes);
 
       expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(TsRestRequestValidationError),
+        expect.anything(),
         expect.anything(),
         expect.anything(),
       );
+
+      const firstArg = errorHandler.mock.calls[0][0];
+
+      expect(firstArg).toBeInstanceOf(TsRestRequestValidationError);
     });
 
     it('does not throw with invalid query type', async () => {

@@ -1,4 +1,5 @@
 import { StandardSchemaV1 } from './standard-schema';
+export { StandardSchemaV1 } from './standard-schema';
 
 /**
  * The error class for standard schema validation errors.
