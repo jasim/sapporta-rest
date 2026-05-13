@@ -1,6 +1,6 @@
 {
   "name": "@sapporta/rest-open-api",
-  "version": "3.52.1",
+  "version": "3.52.2",
   "description": "Sapporta-maintained ts-rest OpenAPI generator for Zod 4 contracts",
   "repository": {
     "type": "git",

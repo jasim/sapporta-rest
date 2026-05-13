@@ -1,6 +1,6 @@
 {
   "name": "@sapporta/rest-core",
-  "version": "3.52.1",
+  "version": "3.52.2",
   "private": false,
   "description": "Sapporta-maintained ts-rest core fork for Zod 4 contracts and inference",
   "keywords": [
