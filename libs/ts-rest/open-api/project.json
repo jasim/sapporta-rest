@@ -1,5 +1,5 @@
 {
-  "name": "ts-rest-open-api",
+  "name": "sapporta-rest-open-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ts-rest/open-api/src",
   "projectType": "library",
@@ -30,17 +30,6 @@
         "generateExportsField": true,
         "updateBuildableProjectDepsInPackageJson": true
       }
-    },
-    "publish": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs ts-rest-open-api {args.ver} {args.tag}"
-      },
-      "dependsOn": [
-        {
-          "target": "build"
-        }
-      ]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

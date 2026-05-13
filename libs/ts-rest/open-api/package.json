@@ -1,17 +1,21 @@
 {
-  "name": "@ts-rest/open-api",
+  "name": "@sapporta/rest-open-api",
   "version": "3.52.1",
+  "description": "Sapporta-maintained ts-rest OpenAPI generator for Zod 4 contracts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ts-rest/ts-rest.git",
+    "url": "https://github.com/sapporta/sapporta-rest.git",
     "directory": "libs/ts-rest/open-api"
   },
   "license": "MIT",
   "dependencies": {
-    "@anatine/zod-openapi": "^1.12.0",
+    "@sapporta/rest-core": "workspace:*",
     "openapi3-ts": "^2.0.2"
   },
   "peerDependencies": {
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
     "zod": "^4.0.0"
   }
 }

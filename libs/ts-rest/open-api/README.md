@@ -1,11 +1,17 @@
-# ts-rest-open-api
+# @sapporta/rest-open-api
 
-This library was generated with [Nx](https://nx.dev).
+Sapporta-maintained OpenAPI generator forked from `@ts-rest/open-api` v4.
 
-## Building
+This package supports Sapporta's Zod 4 contract usage and requires callers to provide a schema transformer. It does not depend on `@anatine/zod-openapi`.
 
-Run `nx build ts-rest-open-api` to build the library.
+Build with:
 
-## Running unit tests
+```bash
+pnpm nx build sapporta-rest-open-api
+```
 
-Run `nx test ts-rest-open-api` to execute the unit tests via [Jest](https://jestjs.io).
+Test with:
+
+```bash
+pnpm nx test sapporta-rest-open-api
+```

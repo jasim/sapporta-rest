@@ -1,22 +1,26 @@
+import { SchemaObject } from 'openapi3-ts';
+import { z } from 'zod';
 import { SchemaTransformerAsync, SchemaTransformerSync } from '../types';
-import { isStandardSchema } from '@ts-rest/core';
-import { generateSchema } from '@anatine/zod-openapi';
-import { toJsonSchema } from '@valibot/to-json-schema';
-import { convert } from '@openapi-contrib/json-schema-to-openapi-schema';
 
-export const ZOD_SYNC: SchemaTransformerSync = ({ schema }) => {
-  return generateSchema(schema as any);
-};
-
-export const ZOD_ASYNC: SchemaTransformerAsync = async ({ schema }) => {
-  return generateSchema(schema as any);
-};
-
-export const VALIBOT_ASYNC: SchemaTransformerAsync = async ({ schema }) => {
-  if (isStandardSchema(schema) && schema['~standard'].vendor === 'valibot') {
-    const jsonSchema = toJsonSchema(schema as any, { errorMode: 'ignore' });
-    return await convert(jsonSchema);
+const stripJsonSchemaMetadata = (schema: unknown): SchemaObject => {
+  if (!schema || typeof schema !== 'object') {
+    return schema as SchemaObject;
   }
 
-  return null;
+  const { $schema, ...rest } = schema as Record<string, unknown>;
+  return rest as SchemaObject;
+};
+
+export const zodV4SchemaTransformer: SchemaTransformerSync = ({ schema }) => {
+  if (!schema || typeof schema !== 'object' || !('_zod' in schema)) {
+    return null;
+  }
+
+  return stripJsonSchemaMetadata(z.toJSONSchema(schema as z.ZodTypeAny));
+};
+
+export const ZOD_SYNC = zodV4SchemaTransformer;
+
+export const ZOD_ASYNC: SchemaTransformerAsync = async (args) => {
+  return zodV4SchemaTransformer(args);
 };

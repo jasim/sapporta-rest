@@ -3,13 +3,6 @@
   "affected": {
     "defaultBase": "main"
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "options": {
-        "__COMMENT__": "This access token is read only for security"
-      }
-    }
-  },
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
@@ -22,10 +15,6 @@
     },
     "lint": {
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
-      "cache": true
-    },
-    "@nx/vite:test": {
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "cache": true
     },
     "@nx/jest:jest": {
@@ -46,29 +35,7 @@
     "appsDir": "apps",
     "libsDir": "libs"
   },
-  "generators": {
-    "@nx/react": {
-      "application": {
-        "style": "none",
-        "linter": "eslint",
-        "babel": true
-      },
-      "component": {
-        "style": "none"
-      },
-      "library": {
-        "style": "none",
-        "linter": "eslint"
-      }
-    },
-    "@nx/next": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint"
-      }
-    }
-  },
-  "defaultProject": "example-next",
+  "defaultProject": "sapporta-rest-core",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "sharedGlobals": ["{workspaceRoot}/babel.config.json"],
@@ -80,6 +47,5 @@
       "!{projectRoot}/.eslintrc.json",
       "!{projectRoot}/src/test-setup.[jt]s"
     ]
-  },
-  "nxCloudAccessToken": "OTIyMmViMGUtODU0My00NzdlLTkzZTgtNzViNjAzZWY2NjYyfHJlYWQ="
+  }
 }

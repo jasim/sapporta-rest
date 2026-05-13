@@ -2,7 +2,7 @@ import {
   type AppRoute,
   type AppRouter,
   isAppRouteOtherResponse,
-} from '@ts-rest/core';
+} from '@sapporta/rest-core';
 import type {
   ExamplesObject,
   InfoObject,
@@ -76,7 +76,7 @@ export function generateOpenApi(
  * @param options.setOperationId - Whether to set operation IDs (true, false, or 'concatenated-path')
  * @param options.jsonQuery - Enable JSON query parameters, [see](/docs/open-api#json-query-params)
  * @param options.operationMapper - Function to customize OpenAPI operations. Receives the operation object, app route, and operation ID
- * @param options.schemaTransformer - Custom schema transformer function. Defaults to ANATINE_ZOD_OPENAPI_SCHEMA_TRANSFORMER
+ * @param options.schemaTransformer - Custom schema transformer function.
  */
 export async function generateOpenApiAsync(
   router: AppRouter,

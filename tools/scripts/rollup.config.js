@@ -1,4 +1,4 @@
-const fs = require('fs-extra');
+const fs = require('fs');
 const path = require('path');
 const { logger } = require('@nx/devkit');
 
@@ -29,10 +29,12 @@ const rollupConfig = (config) => {
       return;
     }
 
-    // STEP 1: Add @ts-rest/core to peerDependencies of all libs, except core itself
+    // STEP 1: Add @sapporta/rest-core to peerDependencies of all libs, except core itself
     // Can't let changesets handle this for us because it sees peerDependencies updates as a breaking change
     const packageJsonPath = path.join(outputDir, 'package.json');
-    const packageJsonObject = fs.readJsonSync(packageJsonPath);
+    const packageJsonObject = JSON.parse(
+      fs.readFileSync(packageJsonPath, 'utf8'),
+    );
     const splitVersion = packageJsonObject.version.split('.');
     splitVersion.splice(-1, 1, '0');
 
@@ -42,21 +44,22 @@ const rollupConfig = (config) => {
 
     packageJsonObject.peerDependencies = {
       ...packageJsonObject.peerDependencies,
-      '@ts-rest/core': peerVersion,
+      '@sapporta/rest-core': peerVersion,
     };
 
-    fs.writeJsonSync(packageJsonPath, sortPackageJson(packageJsonObject), {
-      spaces: 2,
-    });
+    fs.writeFileSync(
+      packageJsonPath,
+      `${JSON.stringify(sortPackageJson(packageJsonObject), null, 2)}\n`,
+    );
 
-    logger.info('\nAdded @ts-rest/core to peer dependencies');
+    logger.info('\nAdded @sapporta/rest-core to peer dependencies');
   };
 
   return {
     ...config,
     external: (source, importer, isResolved) => {
-      // stop rollup from looking for @ts-rest/* because it thinks they're not external since they are not in package.json
-      if (source.startsWith('@ts-rest/')) {
+      // stop rollup from looking for workspace packages because it thinks they're not external since they are not in package.json
+      if (source.startsWith('@sapporta/rest-')) {
         return true;
       }
       return config.external(source, importer, isResolved);

@@ -1,15 +1,14 @@
 import { z } from 'zod';
-import { ZOD_SYNC, ZOD_ASYNC, VALIBOT_ASYNC } from './test-helpers';
-import * as v from 'valibot';
+import { ZOD_SYNC, ZOD_ASYNC } from './test-helpers';
 import { getParamsFromPathOnly, getPathParameterSchema } from './path-params';
 import { ParameterObject } from 'openapi3-ts';
-import { ContractAnyType } from '@ts-rest/core';
+import { ContractAnyType } from '@sapporta/rest-core';
 
 /**
  * Theres a few permutations to deal with, mainly sync and async, so we build up CASES then run them against both
  */
 const CASES: {
-  type: 'zod' | 'valibot';
+  type: 'zod';
   name: string;
   path: string;
   pathParams: unknown;
@@ -160,44 +159,6 @@ const CASES: {
       },
     ],
   },
-  /**
-   * Valibot tests
-   */
-  {
-    type: 'valibot',
-    name: 'single param, valibot schema',
-    path: '/:id',
-    pathParams: v.object({
-      id: v.string(),
-    }),
-    expected: [
-      {
-        name: 'id',
-        in: 'path',
-        required: true,
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
-  },
-  {
-    type: 'valibot',
-    name: 'single param, valibot schema, optional',
-    path: '/:id',
-    pathParams: v.object({
-      id: v.optional(v.string()),
-    }),
-    expected: [
-      {
-        name: 'id',
-        in: 'path',
-        schema: {
-          type: 'string',
-        },
-      },
-    ],
-  },
 ];
 
 const hasOnly = CASES.some((c) => c.only);
@@ -207,10 +168,6 @@ describe('path-params', () => {
   it.each(CASES_TO_RUN)(
     'sync - $name ($type)',
     ({ type, name, path, pathParams, expected }) => {
-      // No valibot sync possible so return
-      if (type === 'valibot') {
-        return;
-      }
       const res = getPathParameterSchema.sync({
         transformSchema: ZOD_SYNC,
         appRoute: {
@@ -235,7 +192,7 @@ describe('path-params', () => {
     'async - $name ($type)',
     async ({ type, name, path, pathParams, expected }) => {
       const res = await getPathParameterSchema.async({
-        transformSchema: type === 'zod' ? ZOD_ASYNC : VALIBOT_ASYNC,
+        transformSchema: ZOD_ASYNC,
         appRoute: {
           method: 'GET',
           path,

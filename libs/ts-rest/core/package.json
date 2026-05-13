@@ -1,29 +1,33 @@
 {
-  "name": "@ts-rest/core",
+  "name": "@sapporta/rest-core",
   "version": "3.52.1",
   "private": false,
-  "description": "RPC-like experience over a regular REST API, with type safe server implementations 🪄",
+  "description": "Sapporta-maintained ts-rest core fork for Zod 4 contracts and inference",
   "keywords": [
     "rpc",
     "rest",
     "typescript",
-    "typescript-rest",
     "http",
     "api",
-    "type safe"
+    "type safe",
+    "sapporta"
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ts-rest/ts-rest.git",
+    "url": "https://github.com/sapporta/sapporta-rest.git",
     "directory": "libs/ts-rest/core"
   },
   "license": "MIT",
   "peerDependencies": {
-    "@types/node": "^18.18.7 || >=20.8.4"
+    "@types/node": "^18.18.7 || >=20.8.4",
+    "zod": "^4.0.0"
   },
   "peerDependenciesMeta": {
     "@types/node": {
       "optional": true
     }
+  },
+  "devDependencies": {
+    "zod": "^4.0.0"
   }
 }

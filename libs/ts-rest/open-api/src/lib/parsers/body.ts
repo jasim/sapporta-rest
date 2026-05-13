@@ -1,4 +1,4 @@
-import { AppRoute } from '@ts-rest/core';
+import { AppRoute } from '@sapporta/rest-core';
 import {
   AsyncAndSyncHelper,
   GetAsyncFunction,

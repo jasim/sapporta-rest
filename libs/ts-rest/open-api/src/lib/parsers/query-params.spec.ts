@@ -1,7 +1,6 @@
 import { z } from 'zod';
 import { getQueryParameterSchema } from './query-params';
-import { ZOD_SYNC, ZOD_ASYNC, VALIBOT_ASYNC } from './test-helpers';
-import * as v from 'valibot';
+import { ZOD_SYNC, ZOD_ASYNC } from './test-helpers';
 
 describe('query-params', () => {
   describe('zod', () => {
@@ -120,39 +119,6 @@ describe('query-params', () => {
         {
           name: 'name',
           in: 'query',
-          schema: {
-            type: 'string',
-          },
-        },
-      ]);
-    });
-  });
-
-  describe('valibot', () => {
-    it('async - single required param', async () => {
-      const res = await getQueryParameterSchema.async({
-        transformSchema: VALIBOT_ASYNC,
-        appRoute: {
-          method: 'GET',
-          path: '/',
-          query: v.object({
-            name: v.string(),
-          }),
-          responses: {
-            200: v.object({
-              name: v.string(),
-            }),
-          },
-        },
-        id: 'testFunc',
-        concatenatedPath: 'testFunc',
-      });
-
-      expect(res).toEqual([
-        {
-          name: 'name',
-          in: 'query',
-          required: true,
           schema: {
             type: 'string',
           },

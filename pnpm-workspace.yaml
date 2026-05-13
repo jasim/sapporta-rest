@@ -1,3 +1,3 @@
 packages:
-  - 'apps/**/*'
-  - 'libs/**/*'
+  - 'libs/ts-rest/core'
+  - 'libs/ts-rest/open-api'

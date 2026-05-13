@@ -1,5 +1,5 @@
 {
-  "name": "ts-rest-core",
+  "name": "sapporta-rest-core",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/ts-rest/core/src",
   "projectType": "library",
@@ -30,17 +30,6 @@
         "generateExportsField": true,
         "updateBuildableProjectDepsInPackageJson": true
       }
-    },
-    "publish": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs ts-rest-core {args.ver} {args.tag}"
-      },
-      "dependsOn": [
-        {
-          "target": "build"
-        }
-      ]
     },
     "lint": {
       "executor": "@nx/eslint:lint",

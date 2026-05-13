@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'ts-rest-core',
+  displayName: 'sapporta-rest-core',
   preset: '../../../jest.preset.js',
   globals: {},
   transform: {
@@ -12,5 +12,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../../coverage/libs/ts-rest/core',
+  testEnvironment: 'node',
 };

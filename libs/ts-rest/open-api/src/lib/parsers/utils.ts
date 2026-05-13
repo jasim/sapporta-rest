@@ -51,7 +51,7 @@ export const schemaToParameter = (
 /**
  * Convert a @type {SchemaObject} to an array of @type {ParameterObject}
  *
- * @param schema - Legacy Zod3 or any Standard Schema
+ * @param schema - Zod 4 JSON schema output
  * @param where - The location of the parameters
  * @param jsonQuery - Whether the schema is a JSON query
  * @returns The parameters for the schema

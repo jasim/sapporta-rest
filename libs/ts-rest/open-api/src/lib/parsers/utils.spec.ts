@@ -1,7 +1,21 @@
 import { SchemaObject } from 'openapi3-ts';
 import { schemaObjectToParameters } from './utils';
 import { z } from 'zod';
-import { generateSchema } from '@anatine/zod-openapi';
+import { zodV4SchemaTransformer } from './test-helpers';
+
+const generateSchema = (schema: z.ZodTypeAny): SchemaObject => {
+  return zodV4SchemaTransformer({
+    schema,
+    appRoute: {
+      method: 'GET',
+      path: '/',
+      responses: {},
+    },
+    id: 'test',
+    concatenatedPath: 'test',
+    type: 'query',
+  })!;
+};
 
 describe('utils', () => {
   describe('schemaObjectToParameters', () => {
@@ -64,6 +78,7 @@ describe('utils', () => {
           in: 'query',
           required: true,
           schema: {
+            additionalProperties: false,
             properties: {
               child: { type: 'string' },
             },
