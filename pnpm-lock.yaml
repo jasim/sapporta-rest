@@ -151,9 +151,6 @@ importers:
 
   libs/ts-rest/open-api:
     dependencies:
-      '@sapporta/rest-core':
-        specifier: workspace:*
-        version: link:../core
       openapi3-ts:
         specifier: ^2.0.2
         version: 2.0.2

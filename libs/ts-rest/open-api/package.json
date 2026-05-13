@@ -9,7 +9,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@sapporta/rest-core": "workspace:*",
     "openapi3-ts": "^2.0.2"
   },
   "peerDependencies": {
