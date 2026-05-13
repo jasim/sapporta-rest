@@ -4,7 +4,7 @@
   "description": "Sapporta-maintained ts-rest OpenAPI generator for Zod 4 contracts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sapporta/sapporta-rest.git",
+    "url": "https://github.com/jasim/sapporta-rest.git",
     "directory": "libs/ts-rest/open-api"
   },
   "license": "MIT",

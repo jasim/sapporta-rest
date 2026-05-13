@@ -1,3 +1,7 @@
 packages:
   - 'libs/ts-rest/core'
   - 'libs/ts-rest/open-api'
+allowBuilds:
+  '@swc/core': true
+  core-js: true
+  nx: true
